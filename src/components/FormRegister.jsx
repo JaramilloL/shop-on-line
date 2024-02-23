@@ -34,7 +34,7 @@ const FormRegister = () => {
         <label htmlFor="floatingPassword">Password</label>
       </div>
       <div className="d-flex justify-content-center align-content-center align-items-center">
-        <button className="btn btn-success mt-3">Register</button>
+        <button className="btn btn-success m-3">Register</button>
       </div>
     </form>
   );
