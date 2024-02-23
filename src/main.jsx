@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routers/Router'
+import StateContext from './context/StateContext'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+  <StateContext>
     <RouterProvider router={router}></RouterProvider>
+  </StateContext>
+    
   </React.StrictMode>,
 )
