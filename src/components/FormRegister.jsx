@@ -1,15 +1,27 @@
 //este componente contiene el formulario de registro del usuario
 //usaremos el hook de useForm que viene de react-hppk-form para la manipulacion de los datos del formulario
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form'
+import { UserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const FormRegister = () => {
+  //llamamos al estado global con useContext
+  const { registerUser } = useContext(UserContext);
+
+  //?usamos la navegacion para la redireccion de register a login form
+  const userNavigate = useNavigate();
+
     const { handleSubmit, register, reset, formState: { errors } } = useForm();
 
     //creamos la funcion de envio de datos del formulario
-    const onSubmit =  handleSubmit((data)=>{
+    const onSubmit =  handleSubmit(async(data)=>{
+      //vamos a usar el register creado en el stateGlobal
         try {
             console.log(data);
+            await registerUser(data.email, data.password);
             reset();
+            userNavigate('/login')
         } catch (error) {
             console.log(error)
         }

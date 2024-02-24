@@ -1,15 +1,26 @@
 //este componente contiene el formulario de login del usuario
 //implementaremos la libreria de react-hook-form para la data de cada formulario
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form'
+import { UserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const FormLogin = () => {
+  //llamamos al contexto para actualizar el envio de login a dashboard
+  const { loginUser } = useContext(UserContext);
+  
+  //?usamos la navegacion para la redireccion de pagina
+  const userNavigate = useNavigate();
+
   const { handleSubmit, register, reset, formState: { errors } } = useForm();
 
     //creamos la funcion de envio de datos del formulario
-    const onSubmit =  handleSubmit((data)=>{
+    const onSubmit =  handleSubmit(async(data)=>{
         try {
             console.log(data);
+            loginUser(data.email, data.password);
             reset();
+            userNavigate('/')
         } catch (error) {
             console.log(error)
         }
