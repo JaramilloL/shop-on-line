@@ -16,6 +16,8 @@ import {
 } from "firebase/auth";
 
 const StateContext = ({ children }) => {
+  const [user, setUser] = useState(null);
+
   //esto sera el estado inicial de la app
   const initialState = {
     isAutenticated: false,
@@ -33,7 +35,7 @@ const StateContext = ({ children }) => {
   const loginAccess = () => dispatch({ type: "login" });
   const logoutAccess = () => dispatch({ type: "logout" });
 
-  const logout = () => signOut();
+  const logout = () => signOut(auth);
 
   //creamos el inicio de secion con google
   const signInWithGoogle = () => {
@@ -43,18 +45,20 @@ const StateContext = ({ children }) => {
 
   //creamos funcion para un reset de password
   const resetPassword = (email) => sendPasswordResetEmail(auth, email);
-  const [user, setUser] = useState()
-
-   //usamos un useeffect para ver el tipo de logeo del usuario es decir si fue mediente google o por correo y password
-   useEffect(()=>{
-    onAuthStateChanged((stateAuth) => {
-      console.log(stateAuth)
-      setUser(stateAuth)
-    })
-  })
 
   //usamos el reducer para traer la validacion del switch que existe en el ReducerContext
   const [state, dispatch] = useReducer(ReducerContext, initialState);
+
+
+  useEffect(() => {
+    // aqui ejecutamos el estado del usuario en cuanto a su logeo
+    //el segundo parametro es un objeto que nos regresa
+    onAuthStateChanged(auth, (currectUser) => {
+      console.log(currectUser);
+      setUser(currectUser);
+    });
+  }, []);
+
   return (
     <UserContext.Provider
       value={{
@@ -67,7 +71,7 @@ const StateContext = ({ children }) => {
         logout,
         signInWithGoogle,
         resetPassword,
-        user
+        user,
       }}
     >
       {children}
